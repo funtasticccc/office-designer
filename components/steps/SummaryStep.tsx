@@ -2,6 +2,7 @@
 
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { getProductById } from "@/data/products";
+import { downloadBlueprintPDF, BlueprintLineItem } from "@/utils/pdf";
 import { formatPrice } from "@/utils/format";
 import { useShallow } from "zustand/react/shallow";
 
@@ -34,13 +35,13 @@ const SummaryStep = () => {
   const total = getTotalPrice();
 
   // Build line items
-  const lineItems: { name: string; detail: string; price: number }[] = [];
+  const lineItems: { name: string; detail: string; price: number; quantity: number }[] = [];
 
   if (desk) {
-    lineItems.push({ name: desk.name, detail: "Desk", price: desk.price });
+    lineItems.push({ name: desk.name, detail: "Desk", price: desk.price, quantity: 1 });
   }
   if (chair) {
-    lineItems.push({ name: chair.name, detail: "Chair", price: chair.price });
+    lineItems.push({ name: chair.name, detail: "Chair", price: chair.price, quantity: 1 });
   }
 
   // Monitors
@@ -48,32 +49,42 @@ const SummaryStep = () => {
     const monitor = getProductById(id);
     if (monitor && count > 0) {
       lineItems.push({
-        name: `${monitor.name} ×${count}`,
+        name: monitor.name,
         detail: "Monitor",
         price: monitor.price * count,
+        quantity: count,
       });
     }
   });
 
   if (selectedTech) {
     const tech = getProductById(selectedTech);
-    if (tech) lineItems.push({ name: tech.name, detail: "Computer", price: tech.price });
+    if (tech) lineItems.push({ name: tech.name, detail: "Computer", price: tech.price, quantity: 1 });
   }
   if (selectedKeyboard) {
     const kb = getProductById(selectedKeyboard);
-    if (kb) lineItems.push({ name: kb.name, detail: "Keyboard", price: kb.price });
+    if (kb) lineItems.push({ name: kb.name, detail: "Keyboard", price: kb.price, quantity: 1 });
   }
   if (selectedMouse) {
     const mouse = getProductById(selectedMouse);
-    if (mouse) lineItems.push({ name: mouse.name, detail: "Mouse", price: mouse.price });
+    if (mouse) lineItems.push({ name: mouse.name, detail: "Mouse", price: mouse.price, quantity: 1 });
   }
 
   for (const accId of selectedAccessories) {
     const acc = getProductById(accId);
     if (acc) {
-      lineItems.push({ name: acc.name, detail: acc.category, price: acc.price });
+      lineItems.push({ name: acc.name, detail: acc.category, price: acc.price, quantity: 1 });
     }
   }
+
+  const handleSaveBlueprint = async () => {
+    try {
+      await downloadBlueprintPDF(lineItems, total);
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+      alert("Unable to generate the PDF. Check the browser console for more details.");
+    }
+  };
 
   return (
     <div>
@@ -86,11 +97,11 @@ const SummaryStep = () => {
               i < lineItems.length - 1 ? "border-b border-monis-sand/60" : ""
             }`}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-monis-sand/50 flex items-center justify-center text-xs font-bold text-monis-charcoal/30 uppercase">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="w-8 h-8 rounded-lg bg-monis-sand/50 flex items-center justify-center text-xs font-bold text-monis-charcoal/30 uppercase flex-shrink-0">
                 {item.detail.slice(0, 2)}
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-monis-charcoal">
                   {item.name}
                 </p>
@@ -99,18 +110,23 @@ const SummaryStep = () => {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-monis-charcoal">
-              {item.price === 0 ? (
-                <span className="text-monis-green">Free</span>
-              ) : (
-                `${formatPrice(item.price)} / week`
-              )}
-            </p>
+            <div className="flex items-center gap-4 flex-shrink-0">
+              <span className="inline-flex items-center justify-center w-6 h-6 bg-monis-orange/10 text-monis-orange font-bold text-sm rounded-md">
+                {item.quantity}
+              </span>
+              <p className="text-sm font-semibold text-monis-charcoal w-32 text-right">
+                {item.price === 0 ? (
+                  <span className="text-monis-green">Free</span>
+                ) : (
+                  `${formatPrice(item.price)} / week`
+                )}
+              </p>
+            </div>
           </div>
         ))}
 
         {/* Total */}
-        <div className="flex items-center justify-between px-4 py-4 bg-monis-sand/30 border-t-2 border-monis-sand">
+        <div className="flex items-center justify-between px-4 py-4 bg-monis-sand/30 border-t-2 border-monis-sand rounded-b-2xl">
           <p className="text-sm font-bold text-monis-charcoal uppercase tracking-wider">
             Total per week
           </p>
@@ -148,7 +164,7 @@ const SummaryStep = () => {
           </svg>
           Share Setup
         </button>
-        <button className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-monis-sand text-sm font-medium text-monis-charcoal/60 hover:border-monis-wood hover:text-monis-charcoal transition-colors">
+        <button onClick={handleSaveBlueprint} className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-monis-sand text-sm font-medium text-monis-charcoal/60 hover:border-monis-wood hover:text-monis-charcoal transition-colors">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
             <polyline points="17 21 17 13 7 13 7 21" />

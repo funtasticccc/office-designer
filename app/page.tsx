@@ -56,7 +56,7 @@ const HomePage = () => {
       <main className="pt-16 pb-24">
         <div className="flex flex-col lg:flex-row min-h-[calc(100vh-10rem)]">
           {/* ── 3D Scene (left on desktop, top on mobile) ── */}
-          <div className="w-full lg:w-[55%] xl:w-[60%] lg:sticky lg:top-16 lg:h-[calc(100vh-10.5rem)] p-4 lg:p-6">
+          <div className="w-full lg:w-[55%] xl:w-[60%] lg:sticky lg:top-16 lg:h-[calc(100vh-10.5rem)] pl-4 pr-[11px] lg:pl-8 lg:pr-4">
             <div className="canvas-container relative group h-[500px] sm:h-[600px] lg:h-full overflow-hidden rounded-3xl border border-monis-sand bg-white/50 backdrop-blur-sm shadow-xl shadow-monis-charcoal/5 interaction-container">
               {/* Toolbar (Top Right) */}
               <div className="absolute top-4 right-4 z-20 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -96,7 +96,7 @@ const HomePage = () => {
           </div>
 
           {/* ── Wizard Panel (right on desktop, below on mobile) ── */}
-          <div className="w-full lg:w-[45%] xl:w-[40%] pl-4 pr-[11px] lg:px-8 overflow-y-auto auto-hide-scrollbar lg:h-[calc(100vh-10.5rem)] lg:sticky lg:top-16">
+          <div className="w-full lg:w-[45%] xl:w-[40%] pl-4 pr-[11px] lg:pl-4 lg:pr-8 overflow-y-auto auto-hide-scrollbar lg:h-[calc(100vh-10.5rem)] lg:sticky lg:top-16">
             <WizardPanel />
           </div>
         </div>

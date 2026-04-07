@@ -6,7 +6,7 @@ const Navbar = () => {
   const resetAll = useWorkspaceStore((s) => s.resetAll);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 lg:px-8 bg-monis-cream/90 backdrop-blur-md border-b border-monis-sand">
+    <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between pl-4 pr-[19px] lg:px-8 bg-monis-cream/90 backdrop-blur-md border-b border-monis-sand">
       {/* Logo */}
       <div className="flex items-center gap-2 cursor-pointer" onClick={resetAll}>
         <svg xmlns="http://www.w3.org/2000/svg" width="110" height="32" fill="none" viewBox="0 0 1326 384">
