@@ -68,15 +68,15 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   },
 
   // ── Selections ──
-  selectedDesk: "genius_desk_1",
+  selectedDesk: "desk_2",
   selectedChair: "ergonomic_chair",
   monitorSelections: {
-    genius_monitor_1: 1,
+    monitor_2: 1,
   },
-  selectedTech: "genius_macbook",
-  selectedKeyboard: "genius_kb_1",
-  selectedMouse: "genius_mouse_1",
-  selectedAccessories: ["genius_batman"],
+  selectedTech: "macbook",
+  selectedKeyboard: "kb_1",
+  selectedMouse: "mouse_1",
+  selectedAccessories: ["bonsai"],
 
   // ── Actions ──
   selectDesk: (id) => set({ selectedDesk: id }),
@@ -112,13 +112,13 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   resetAll: () =>
     set({
       currentStep: "desk",
-      selectedDesk: "genius_desk_1",
+      selectedDesk: "desk_1",
       selectedChair: "ergonomic_chair",
-      monitorSelections: { genius_monitor_1: 1 },
-      selectedTech: "genius_macbook",
-      selectedKeyboard: "genius_kb_1",
-      selectedMouse: "genius_mouse_1",
-      selectedAccessories: ["genius_batman"],
+      monitorSelections: { monitor_2: 1 },
+      selectedTech: "macbook",
+      selectedKeyboard: "kb_1",
+      selectedMouse: "mouse_1",
+      selectedAccessories: ["batman"],
     }),
 
   // ── Derived ──

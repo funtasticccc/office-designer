@@ -38,15 +38,16 @@ const WorkspaceItems = () => {
     const slots = SLOT_MAP[product.category];
     if (!slots || !slots[0]) return null;
     const slot = slots[0];
+    const offset = product.positionOffset || [0, 0, 0];
 
     return (
       <WorkspaceModel
         key={`${keyPrefix}-${id}`}
         modelPath={product.modelPath}
         position={[
-          slot.position[0],
-          slot.position[1] + surfaceY,
-          slot.position[2],
+          slot.position[0] + offset[0],
+          slot.position[1] + surfaceY + offset[1],
+          slot.position[2] + offset[2],
         ]}
         scale={product.scale}
         rotation={[
@@ -59,9 +60,9 @@ const WorkspaceItems = () => {
           <FallbackModel
             type="accessory"
             position={[
-              slot.position[0],
-              slot.position[1] + surfaceY,
-              slot.position[2],
+              slot.position[0] + offset[0],
+              slot.position[1] + surfaceY + offset[1],
+              slot.position[2] + offset[2],
             ]}
             rotation={[
               (slot.rotation?.[0] || 0) + (product.rotation?.[0] || 0),
