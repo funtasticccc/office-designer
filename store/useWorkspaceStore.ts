@@ -112,13 +112,13 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   resetAll: () =>
     set({
       currentStep: "desk",
-      selectedDesk: "desk_1",
+      selectedDesk: "desk_2",
       selectedChair: "ergonomic_chair",
       monitorSelections: { monitor_2: 1 },
       selectedTech: "macbook",
       selectedKeyboard: "kb_1",
       selectedMouse: "mouse_1",
-      selectedAccessories: ["batman"],
+      selectedAccessories: ["bonsai"],
     }),
 
   // ── Derived ──
