@@ -1,11 +1,16 @@
 import { create } from "zustand";
-import { ProductCategory, getProductById, DESK_CONFIGS } from "@/data/products";
+import { getProductById, DESK_CONFIGS } from "@/data/products";
 
-export type WizardStep = "desk" | "chair" | "monitors" | "accessories" | "summary";
+export type WizardStep = "desk" | "chair" | "monitors" | "tech" | "keyboards" | "mouses" | "accessories" | "summary";
+export type CameraPreset = "overview" | "side" | "front";
 
-const STEPS: WizardStep[] = ["desk", "chair", "monitors", "accessories", "summary"];
+const STEPS: WizardStep[] = ["desk", "chair", "monitors", "tech", "keyboards", "mouses", "accessories", "summary"];
 
 interface WorkspaceState {
+  // ── Camera ──
+  cameraPreset: CameraPreset;
+  setCameraPreset: (preset: CameraPreset) => void;
+
   // ── Wizard navigation ──
   currentStep: WizardStep;
   setStep: (step: WizardStep) => void;
@@ -17,12 +22,18 @@ interface WorkspaceState {
   selectedDesk: string | null;
   selectedChair: string | null;
   monitorSelections: Record<string, number>;
+  selectedTech: string | null;
+  selectedKeyboard: string | null;
+  selectedMouse: string | null;
   selectedAccessories: string[];
 
   // ── Actions ──
   selectDesk: (id: string) => void;
   selectChair: (id: string) => void;
   setMonitorCount: (id: string, count: number) => void;
+  selectTech: (id: string | null) => void;
+  selectKeyboard: (id: string | null) => void;
+  selectMouse: (id: string | null) => void;
   toggleAccessory: (id: string) => void;
   resetAll: () => void;
 
@@ -34,6 +45,10 @@ interface WorkspaceState {
 }
 
 export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
+  // ── Camera ──
+  cameraPreset: "overview",
+  setCameraPreset: (preset) => set({ cameraPreset: preset }),
+
   // ── Wizard ──
   currentStep: "desk",
   setStep: (step) => set({ currentStep: step }),
@@ -53,12 +68,15 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   },
 
   // ── Selections ──
-  selectedDesk: "genius_desk_1",
+  selectedDesk: "desk_2",
   selectedChair: "ergonomic_chair",
   monitorSelections: {
-    genius_monitor_1: 1,
+    monitor_2: 1,
   },
-  selectedAccessories: ["genius_kb_1", "genius_mouse_1"],
+  selectedTech: "macbook",
+  selectedKeyboard: "kb_1",
+  selectedMouse: "mouse_1",
+  selectedAccessories: ["bonsai"],
 
   // ── Actions ──
   selectDesk: (id) => set({ selectedDesk: id }),
@@ -67,22 +85,24 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     set((state) => {
       const newSelections = { ...state.monitorSelections };
       const val = Math.max(0, count);
-      
-      // Total monitor count should not exceed 3
+
       const currentTotal = Object.entries(newSelections)
         .filter(([key]) => key !== id)
         .reduce((sum, [, c]) => sum + c, 0);
-      
+
       const allowed = Math.min(val, 3 - currentTotal);
-      
+
       if (allowed <= 0) {
         delete newSelections[id];
       } else {
         newSelections[id] = allowed;
       }
-      
+
       return { monitorSelections: newSelections };
     }),
+  selectTech: (id) => set({ selectedTech: id }),
+  selectKeyboard: (id) => set({ selectedKeyboard: id }),
+  selectMouse: (id) => set({ selectedMouse: id }),
   toggleAccessory: (id) =>
     set((state) => ({
       selectedAccessories: state.selectedAccessories.includes(id)
@@ -92,16 +112,20 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   resetAll: () =>
     set({
       currentStep: "desk",
-      selectedDesk: "genius_desk_1",
+      selectedDesk: "desk_1",
       selectedChair: "ergonomic_chair",
-      monitorSelections: { genius_monitor_1: 1 },
-      selectedAccessories: ["genius_kb_1", "genius_mouse_1"],
+      monitorSelections: { monitor_2: 1 },
+      selectedTech: "macbook",
+      selectedKeyboard: "kb_1",
+      selectedMouse: "mouse_1",
+      selectedAccessories: ["batman"],
     }),
 
   // ── Derived ──
   getTotalPrice: () => {
     const state = get();
     let total = 0;
+
     if (state.selectedDesk) {
       const desk = getProductById(state.selectedDesk);
       if (desk) total += desk.price;
@@ -110,12 +134,24 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
       const chair = getProductById(state.selectedChair);
       if (chair) total += chair.price;
     }
-    
-    // Monitors
+
     Object.entries(state.monitorSelections).forEach(([id, count]) => {
       const monitor = getProductById(id);
       if (monitor) total += monitor.price * count;
     });
+
+    if (state.selectedTech) {
+      const tech = getProductById(state.selectedTech);
+      if (tech) total += tech.price;
+    }
+    if (state.selectedKeyboard) {
+      const kb = getProductById(state.selectedKeyboard);
+      if (kb) total += kb.price;
+    }
+    if (state.selectedMouse) {
+      const mouse = getProductById(state.selectedMouse);
+      if (mouse) total += mouse.price;
+    }
 
     for (const accId of state.selectedAccessories) {
       const acc = getProductById(accId);
@@ -135,12 +171,17 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   getSelectedItemIds: () => {
     const state = get();
     const ids: string[] = [];
+
     if (state.selectedDesk) ids.push(state.selectedDesk);
     if (state.selectedChair) ids.push(state.selectedChair);
-    
+
     Object.entries(state.monitorSelections).forEach(([id, count]) => {
       for (let i = 0; i < count; i++) ids.push(id);
     });
+
+    if (state.selectedTech) ids.push(state.selectedTech);
+    if (state.selectedKeyboard) ids.push(state.selectedKeyboard);
+    if (state.selectedMouse) ids.push(state.selectedMouse);
 
     ids.push(...state.selectedAccessories);
     return ids;

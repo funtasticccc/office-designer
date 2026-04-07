@@ -150,14 +150,10 @@ const FallbackModel = ({ type, position, rotation = [0, 0, 0] }: FallbackModelPr
     case "accessory":
       return (
         <group position={position} rotation={rotation}>
-          {/* Pots and plants as placeholders */}
+          {/* Simple generic box placeholder */}
           <mesh position={[0, 0.05, 0]} castShadow>
-            <cylinderGeometry args={[0.06, 0.04, 0.1, 8]} />
-            <meshStandardMaterial color="#D4A574" />
-          </mesh>
-          <mesh position={[0, 0.2, 0]}>
-            <sphereGeometry args={[0.1, 6, 6]} />
-            <meshStandardMaterial color="#4a7c59" />
+            <boxGeometry args={[0.1, 0.1, 0.1]} />
+            <meshStandardMaterial color="#ccc" />
           </mesh>
         </group>
       );
