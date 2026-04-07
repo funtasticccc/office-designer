@@ -10,6 +10,9 @@ const SummaryStep = () => {
     selectedDesk,
     selectedChair,
     monitorSelections,
+    selectedTech,
+    selectedKeyboard,
+    selectedMouse,
     selectedAccessories,
     getTotalPrice,
   } = useWorkspaceStore(
@@ -17,6 +20,9 @@ const SummaryStep = () => {
       selectedDesk: s.selectedDesk,
       selectedChair: s.selectedChair,
       monitorSelections: s.monitorSelections,
+      selectedTech: s.selectedTech,
+      selectedKeyboard: s.selectedKeyboard,
+      selectedMouse: s.selectedMouse,
       selectedAccessories: s.selectedAccessories,
       getTotalPrice: s.getTotalPrice,
     }))
@@ -36,7 +42,7 @@ const SummaryStep = () => {
   if (chair) {
     lineItems.push({ name: chair.name, detail: "Chair", price: chair.price });
   }
-  
+
   // Monitors
   Object.entries(monitorSelections).forEach(([id, count]) => {
     const monitor = getProductById(id);
@@ -48,6 +54,19 @@ const SummaryStep = () => {
       });
     }
   });
+
+  if (selectedTech) {
+    const tech = getProductById(selectedTech);
+    if (tech) lineItems.push({ name: tech.name, detail: "Computer", price: tech.price });
+  }
+  if (selectedKeyboard) {
+    const kb = getProductById(selectedKeyboard);
+    if (kb) lineItems.push({ name: kb.name, detail: "Keyboard", price: kb.price });
+  }
+  if (selectedMouse) {
+    const mouse = getProductById(selectedMouse);
+    if (mouse) lineItems.push({ name: mouse.name, detail: "Mouse", price: mouse.price });
+  }
 
   for (const accId of selectedAccessories) {
     const acc = getProductById(accId);

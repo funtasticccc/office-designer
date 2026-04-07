@@ -5,9 +5,9 @@ import { ACCESSORY_CATEGORIES, getProductsByCategory, Product } from "@/data/pro
 import { formatPrice } from "@/utils/format";
 
 const ACCESSORY_ICONS: Record<string, string> = {
-  mx_keyboard: "⌨️",
-  mx_mouse: "🖱️",
-  desk_lamp: "💡",
+  genius_table_lamp: "💡",
+  genius_table_mic: "🎙️",
+  genius_batman: "🦇",
   desk_plant: "🌿",
   webcam: "📷",
   coffee_machine: "☕",
@@ -17,11 +17,10 @@ const AccessoriesStep = () => {
   const selectedAccessories = useWorkspaceStore((s) => s.selectedAccessories);
   const toggleAccessory = useWorkspaceStore((s) => s.toggleAccessory);
 
-  // Gather all accessory products
   const accessories: Product[] = [];
   for (const cat of ACCESSORY_CATEGORIES) {
     accessories.push(...getProductsByCategory(cat));
-  }   
+  }
 
   return (
     <div>
@@ -40,9 +39,9 @@ const AccessoriesStep = () => {
               </span>
 
               {/* Name */}
-              <p 
+              <p
                 className="text-[10.5px] font-semibold text-monis-charcoal leading-[1.2] text-center line-clamp-2 overflow-hidden h-[1.6rem] mb-1.5 px-0.5"
-                style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}
+                style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 2 }}
               >
                 {acc.name}
               </p>
@@ -77,10 +76,10 @@ const AccessoriesStep = () => {
       </div>
 
       {/* Tip */}
-      <div className="mt-6 p-3 bg-monis-green/5 border border-monis-green/15 rounded-xl">
-        <p className="text-xs text-monis-green font-medium flex items-center gap-2">
-          <span>🌱</span>
-          The tropical desk plant is free with every workspace rental!
+      <div className="mt-6 p-3 bg-monis-sand/30 border border-monis-sand rounded-xl">
+        <p className="text-xs text-monis-charcoal/50 font-medium flex items-center gap-2">
+          <span>✨</span>
+          Add the finishing touches — lighting, audio, and personality to your space.
         </p>
       </div>
     </div>

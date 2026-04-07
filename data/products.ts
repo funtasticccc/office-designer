@@ -7,6 +7,7 @@ export type ProductCategory =
   | "keyboard"
   | "mouse"
   | "lamp"
+  | "mic"
   | "plant"
   | "webcam"
   | "coffee"
@@ -76,6 +77,7 @@ export const SLOT_MAP: Record<string, SlotPosition[]> = {
   coffee: [{ position: [0.85, 0, -0.2], rotation: [0, -0.5, 0] }],
   tech: [{ position: [-0.6, 0, 0.45], rotation: [0, 0.5, 0] }],
   toy: [{ position: [0.65, 0, 0.45], rotation: [0, -0.3, 0] }],
+  mic: [{ position: [0.25, 0.05, -0.08], rotation: [0, -0.3, 0] }],
   chair: [{ position: [0, 0.0, 0.9], rotation: [0, Math.PI + 0.8, 0] }],
 };
 
@@ -250,7 +252,7 @@ export const PRODUCTS: Product[] = [
     thumbnail: "/images/monitor4Image.png",
   },
 
-  // ── ACCESSORIES ──
+  // ── KEYBOARDS ──
   {
     id: "genius_kb_1",
     name: "Genius Mech TKL",
@@ -274,6 +276,41 @@ export const PRODUCTS: Product[] = [
     thumbnail: "/images/keyboard2Image.png",
   },
   {
+    id: "genius_kb_3",
+    name: "Genius RGB Pro",
+    description: "Full-size RGB backlit, hot-swap switches, aluminum top plate",
+    price: 145000,
+    category: "keyboard",
+    modelPath: "/gbl/keyboards/keyboard3.glb",
+    scale: 0.0015,
+    rotation: [0, -Math.PI / 2, 0],
+    thumbnail: "/images/keyboard3Image.png",
+  },
+  {
+    id: "genius_kb_4",
+    name: "Genius Wireless Slim",
+    description: "Bluetooth 5.0, connects up to 3 devices, 6-month battery",
+    price: 125000,
+    category: "keyboard",
+    modelPath: "/gbl/keyboards/keyboard4.glb",
+    scale: 1.4,
+    rotation: [0, -Math.PI / 2, 0],
+    thumbnail: "/images/keyboard4Image.png",
+  },
+  {
+    id: "genius_kb_5",
+    name: "Genius 60% Compact",
+    description: "60% layout, custom keycaps, programmable layers, RGB underglow",
+    price: 155000,
+    category: "keyboard",
+    modelPath: "/gbl/keyboards/keyboard5.glb",
+    scale: 0.04,
+    rotation: [0, -Math.PI / 2, 0],
+    thumbnail: "/images/keyboard5Image.png",
+  },
+
+  // ── MICE ──
+  {
     id: "genius_mouse_1",
     name: "Genius Ergo Mouse",
     description: "Vertical design, reduces wrist strain, 4000 DPI sensor",
@@ -284,6 +321,30 @@ export const PRODUCTS: Product[] = [
     rotation: [0, 0, 0],
     thumbnail: "/images/mouse1Image.png",
   },
+  {
+    id: "genius_mouse_2",
+    name: "Genius Precision Pro",
+    description: "Wireless 2.4GHz, 16000 DPI, rechargeable, silent clicks",
+    price: 110000,
+    category: "mouse",
+    modelPath: "/gbl/mouses/mouse2.glb",
+    scale: 0.05,
+    rotation: [0, 0, 0],
+    thumbnail: "/images/mouse2Image.png",
+  },
+  {
+    id: "genius_mouse_3",
+    name: "Genius Gaming Pro",
+    description: "25600 DPI optical, 11 programmable buttons, RGB, braided cable",
+    price: 125000,
+    category: "mouse",
+    modelPath: "/gbl/mouses/mouse3.glb",
+    scale: 0.01,
+    rotation: [0, 0, 0],
+    thumbnail: "/images/mouse3Image.png",
+  },
+
+  // ── TECH / COMPUTERS ──
   {
     id: "genius_macbook",
     name: "MacBook Pro 16",
@@ -307,13 +368,70 @@ export const PRODUCTS: Product[] = [
     thumbnail: "/images/ipad_airImage.png",
   },
   {
+    id: "genius_asus_rog",
+    name: "Asus ROG G15",
+    description: "Ryzen 9, RTX 3080, 15.6\" 300Hz display, per-key RGB",
+    price: 380000,
+    category: "tech",
+    modelPath: "/gbl/tech/asus_rog_g15.glb",
+    scale: 1.4,
+    rotation: [0, 0, 0],
+    thumbnail: "/images/asus_rog_g15Image.png",
+  },
+  // {
+  //   id: "genius_pc_1",
+  //   name: "Genius Tower Pro",
+  //   description: "Intel Core i9, 64GB DDR5, 2TB NVMe SSD, quiet cooling",
+  //   price: 420000,
+  //   category: "tech",
+  //   modelPath: "/gbl/tech/pc1.glb",
+  //   scale: 0.01,
+  //   rotation: [0, 0, 0],
+  //   thumbnail: "/images/pc1Image.png",
+  // },
+  {
+    id: "genius_pc_2",
+    name: "Genius Gaming Rig",
+    description: "AMD Ryzen 7, RTX 4080, tempered glass, addressable RGB",
+    price: 495000,
+    category: "tech",
+    modelPath: "/gbl/tech/pc2.glb",
+    scale: 0.5,
+    rotation: [0, 0, 0],
+    thumbnail: "/images/pc2Image.png",
+  },
+
+  // ── ACCESSORIES ──
+  {
+    id: "genius_table_lamp",
+    name: "Genius Desk Lamp",
+    description: "Adjustable arm, warm/cool modes, wireless charging base",
+    price: 65000,
+    category: "lamp",
+    modelPath: "/gbl/accessories/tablelamp1.glb",
+    scale: 14,
+    rotation: [0, 0, 0],
+    thumbnail: "/images/tablelamp1Image.png",
+  },
+  {
+    id: "genius_table_mic",
+    name: "Genius Desk Mic",
+    description: "Cardioid condenser, USB-C, mute button, pop filter included",
+    price: 75000,
+    category: "mic",
+    modelPath: "/gbl/accessories/tablemic1.glb",
+    scale: 8,
+    rotation: [0, 0, 0],
+    thumbnail: "/images/tablemic1Image.png",
+  },
+  {
     id: "genius_batman",
     name: "Lego Batman Figurine",
     description: "Collectible series, adds +10 to setups' coolness",
     price: 15000,
     category: "toy",
     modelPath: "/gbl/accessories/legobatman.glb",
-    scale: 8.0,
+    scale: 0.01,
     rotation: [0, 0, 0],
     thumbnail: "/images/legobatmanImage.png",
   },
@@ -327,13 +445,12 @@ export const getProductsByCategory = (category: ProductCategory): Product[] =>
 export const getProductById = (id: string): Product | undefined =>
   PRODUCTS.find((p) => p.id === id);
 
+// Categories shown in the Accessories step (lamp, mic, toys — not keyboard/mouse/tech which have their own steps)
 export const ACCESSORY_CATEGORIES: ProductCategory[] = [
-  "keyboard",
-  "mouse",
   "lamp",
+  "mic",
   "plant",
   "webcam",
   "coffee",
-  "tech",
   "toy",
 ];
