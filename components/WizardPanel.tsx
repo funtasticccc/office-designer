@@ -56,57 +56,64 @@ const STEP_HEADERS: Record<WizardStep, { title: string; subtitle: string }> = {
   },
 };
 
-const WizardPanel = () => {
+export const StepIndicators = () => {
   const currentStep = useWorkspaceStore((s) => s.currentStep);
   const setStep = useWorkspaceStore((s) => s.setStep);
 
   const currentIndex = STEPS.findIndex((s) => s.key === currentStep);
+
+  return (
+    <div className="flex items-center gap-1.5 pb-3">
+      {STEPS.map((step, i) => (
+        <button
+          key={step.key}
+          onClick={() => setStep(step.key)}
+          className={`step-dot ${
+            i === currentIndex
+              ? "active"
+              : i < currentIndex
+              ? "completed"
+              : "upcoming"
+          }`}
+          aria-label={step.label}
+        />
+      ))}
+      <span className="ml-3 text-xs font-semibold text-monis-orange uppercase tracking-widest">
+        Step {currentIndex + 1} of {STEPS.length}
+      </span>
+    </div>
+  );
+};
+
+export const StepTitle = () => {
+  const currentStep = useWorkspaceStore((s) => s.currentStep);
   const header = STEP_HEADERS[currentStep];
 
   return (
-    <div className="py-6 lg:py-8">
-      {/* ── Step Indicators ── */}
-      <div className="flex items-center gap-1.5 mb-6">
-        {STEPS.map((step, i) => (
-          <button
-            key={step.key}
-            onClick={() => setStep(step.key)}
-            className={`step-dot ${
-              i === currentIndex
-                ? "active"
-                : i < currentIndex
-                ? "completed"
-                : "upcoming"
-            }`}
-            aria-label={step.label}
-          />
-        ))}
-        <span className="ml-3 text-xs font-semibold text-monis-orange uppercase tracking-widest">
-          Step {currentIndex + 1} of {STEPS.length}
-        </span>
-      </div>
+    <div className="mb-6">
+      <h1 className="font-display text-3xl lg:text-4xl text-monis-charcoal leading-tight pt-3">
+        {header.title}
+      </h1>
+      <p className="mt-2 text-sm text-monis-charcoal/50 leading-relaxed max-w-md">
+        {header.subtitle}
+      </p>
+    </div>
+  );
+};
 
-      {/* ── Step Header ── */}
-      <div className="mb-6">
-        <h1 className="font-display text-3xl lg:text-4xl text-monis-charcoal leading-tight">
-          {header.title}
-        </h1>
-        <p className="mt-2 text-sm text-monis-charcoal/50 leading-relaxed max-w-md">
-          {header.subtitle}
-        </p>
-      </div>
+const WizardPanel = () => {
+  const currentStep = useWorkspaceStore((s) => s.currentStep);
 
-      {/* ── Step Content ── */}
-      <div className="animate-fade-in">
-        {currentStep === "desk" && <DeskStep />}
-        {currentStep === "chair" && <ChairStep />}
-        {currentStep === "monitors" && <MonitorStep />}
-        {currentStep === "tech" && <TechStep />}
-        {currentStep === "keyboards" && <KeyboardStep />}
-        {currentStep === "mouses" && <MouseStep />}
-        {currentStep === "accessories" && <AccessoriesStep />}
-        {currentStep === "summary" && <SummaryStep />}
-      </div>
+  return (
+    <div className="animate-fade-in">
+      {currentStep === "desk" && <DeskStep />}
+      {currentStep === "chair" && <ChairStep />}
+      {currentStep === "monitors" && <MonitorStep />}
+      {currentStep === "tech" && <TechStep />}
+      {currentStep === "keyboards" && <KeyboardStep />}
+      {currentStep === "mouses" && <MouseStep />}
+      {currentStep === "accessories" && <AccessoriesStep />}
+      {currentStep === "summary" && <SummaryStep />}
     </div>
   );
 };

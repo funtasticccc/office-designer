@@ -53,6 +53,13 @@ body {
   border-radius: 3px;
 }
 
+/* Hide scrollbar on mobile */
+@media (max-width: 1023px) {
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+}
+
 /* ── Step indicator ── */
 .step-dot {
   @apply w-2.5 h-2.5 rounded-full transition-all duration-300;
@@ -108,6 +115,13 @@ body {
   background: linear-gradient(135deg, #fef9f0 0%, #f5ebe0 50%, #e8d5c4 100%);
   border-radius: 16px;
   overflow: hidden;
+}
+
+@media (max-width: 1023px) {
+  .canvas-container {
+    height: 100%;
+    min-height: 0;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -178,4 +192,18 @@ body {
 
 .auto-hide-scrollbar:hover::-webkit-scrollbar-thumb {
   background-color: rgba(212, 165, 116, 0.4);
+}
+
+/* ── Fade in animation ── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
 }
