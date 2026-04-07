@@ -5,14 +5,20 @@ import { formatPrice } from "@/utils/format";
 import { useShallow } from "zustand/react/shallow";
 
 const PriceBar = () => {
-  const { 
-    getTotalPrice, 
+  const {
+    getTotalPrice,
     monitorSelections,
-    selectedAccessories 
+    selectedAccessories,
+    selectedTech,
+    selectedKeyboard,
+    selectedMouse
   } = useWorkspaceStore(useShallow((s) => ({
     getTotalPrice: s.getTotalPrice,
     monitorSelections: s.monitorSelections,
     selectedAccessories: s.selectedAccessories,
+    selectedTech: s.selectedTech,
+    selectedKeyboard: s.selectedKeyboard,
+    selectedMouse: s.selectedMouse,
   })));
 
   const currentStep = useWorkspaceStore((s) => s.currentStep);
@@ -20,10 +26,10 @@ const PriceBar = () => {
   const canGoNext = useWorkspaceStore((s) => s.canGoNext);
 
   const total = getTotalPrice();
-  
+
   const monitorTotalCount = Object.values(monitorSelections).reduce((a, b) => a + b, 0);
   const itemCount =
-    2 + monitorTotalCount + selectedAccessories.length; // desk + chair + monitors + accessories
+    2 + monitorTotalCount + (selectedTech ? 1 : 0) + (selectedKeyboard ? 1 : 0) + (selectedMouse ? 1 : 0) + selectedAccessories.length; // desk + chair + monitors + tech + keyboard + mouse + accessories
 
   const isSummary = currentStep === "summary";
 

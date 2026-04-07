@@ -97,11 +97,11 @@ const SummaryStep = () => {
               i < lineItems.length - 1 ? "border-b border-monis-sand/60" : ""
             }`}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-monis-sand/50 flex items-center justify-center text-xs font-bold text-monis-charcoal/30 uppercase">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="w-8 h-8 rounded-lg bg-monis-sand/50 flex items-center justify-center text-xs font-bold text-monis-charcoal/30 uppercase flex-shrink-0">
                 {item.detail.slice(0, 2)}
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-monis-charcoal">
                   {item.name}
                 </p>
@@ -110,18 +110,23 @@ const SummaryStep = () => {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-monis-charcoal">
-              {item.price === 0 ? (
-                <span className="text-monis-green">Free</span>
-              ) : (
-                `${formatPrice(item.price)} / week`
-              )}
-            </p>
+            <div className="flex items-center gap-4 flex-shrink-0">
+              <span className="inline-flex items-center justify-center w-6 h-6 bg-monis-orange/10 text-monis-orange font-bold text-sm rounded-md">
+                {item.quantity}
+              </span>
+              <p className="text-sm font-semibold text-monis-charcoal w-32 text-right">
+                {item.price === 0 ? (
+                  <span className="text-monis-green">Free</span>
+                ) : (
+                  `${formatPrice(item.price)} / week`
+                )}
+              </p>
+            </div>
           </div>
         ))}
 
         {/* Total */}
-        <div className="flex items-center justify-between px-4 py-4 bg-monis-sand/30 border-t-2 border-monis-sand">
+        <div className="flex items-center justify-between px-4 py-4 bg-monis-sand/30 border-t-2 border-monis-sand rounded-b-2xl">
           <p className="text-sm font-bold text-monis-charcoal uppercase tracking-wider">
             Total per week
           </p>
