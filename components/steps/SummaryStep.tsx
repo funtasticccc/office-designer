@@ -16,6 +16,7 @@ const SummaryStep = () => {
     selectedMouse,
     selectedAccessories,
     getTotalPrice,
+    roomDims,
   } = useWorkspaceStore(
     useShallow((s) => ({
       selectedDesk: s.selectedDesk,
@@ -26,6 +27,7 @@ const SummaryStep = () => {
       selectedMouse: s.selectedMouse,
       selectedAccessories: s.selectedAccessories,
       getTotalPrice: s.getTotalPrice,
+      roomDims: s.roomDims,
     }))
   );
 
@@ -79,7 +81,7 @@ const SummaryStep = () => {
 
   const handleSaveBlueprint = async () => {
     try {
-      await downloadBlueprintPDF(lineItems, total);
+      await downloadBlueprintPDF(lineItems, total, roomDims);
     } catch (error) {
       console.error("Failed to generate PDF:", error);
       alert("Unable to generate the PDF. Check the browser console for more details.");

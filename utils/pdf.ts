@@ -10,6 +10,7 @@ export interface BlueprintLineItem {
 export const downloadBlueprintPDF = async (
   lineItems: BlueprintLineItem[],
   total: number,
+  roomDims?: { w: number; l: number; h: number },
   filename = "office-blueprint.pdf"
 ) => {
   const { jsPDF } = await import("jspdf");
@@ -63,6 +64,11 @@ export const downloadBlueprintPDF = async (
   doc.setFontSize(11);
   doc.text(`Created: ${new Date().toLocaleDateString()}`, margin, cursorY);
   cursorY += 22;
+
+  if (roomDims) {
+    doc.text(`Room Dimensions: ${roomDims.w}m × ${roomDims.l}m × ${roomDims.h}m`, margin, cursorY);
+    cursorY += 22;
+  }
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);

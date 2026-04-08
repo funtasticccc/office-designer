@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import WizardPanel, { StepIndicators, StepTitle } from "@/components/WizardPanel";
 import PriceBar from "@/components/PriceBar";
 import LoadingScene from "@/components/LoadingScene";
+import RoomSettingsPanel from "@/components/RoomSettingsPanel";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 
 // Dynamic import for Three.js (no SSR)
@@ -105,6 +106,7 @@ const HomePage = () => {
               <Suspense fallback={<LoadingScene />}>
                 <Scene3D />
               </Suspense>
+              <RoomSettingsPanel />
             </div>
           </div>
 
@@ -121,6 +123,7 @@ const HomePage = () => {
                 <Suspense fallback={<LoadingScene />}>
                   <Scene3D />
                 </Suspense>
+                <RoomSettingsPanel />
               </div>
 
               {/* Step Indicators - stays with image */}
