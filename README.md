@@ -164,5 +164,6 @@ This project is built for the Desent Solutions coding challenge. 3D models are l
 <img width="959" height="435" alt="image" src="https://github.com/user-attachments/assets/b99a1fe8-0924-4a88-9e8e-5c9a1ff06ce7" />
 <img width="959" height="434" alt="image" src="https://github.com/user-attachments/assets/c5ba75c5-ae52-459e-aab3-be308e34f98e" />
 <img width="959" height="437" alt="image" src="https://github.com/user-attachments/assets/62ee219f-03e6-4c53-90e7-99321c9cd84f" />
+<img width="201" height="386" alt="image" src="https://github.com/user-attachments/assets/46b49249-a890-4634-9e87-f974c6361838" />
 <img width="173" height="398" alt="image" src="https://github.com/user-attachments/assets/f36aa3a4-69e6-4bb4-aba7-e03d5147748e" />
 <img width="180" height="401" alt="image" src="https://github.com/user-attachments/assets/b94738e5-53b4-4812-9e05-ee4e18d42ed3" />
