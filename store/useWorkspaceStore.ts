@@ -7,6 +7,10 @@ export type CameraPreset = "overview" | "side" | "front";
 const STEPS: WizardStep[] = ["desk", "chair", "monitors", "tech", "keyboards", "mouses", "accessories", "summary"];
 
 interface WorkspaceState {
+  // ── Room Dimensions ──
+  roomDims: { w: number; l: number; h: number };
+  setRoomDims: (dims: Partial<{ w: number; l: number; h: number }>) => void;
+
   // ── Camera ──
   cameraPreset: CameraPreset;
   setCameraPreset: (preset: CameraPreset) => void;
@@ -45,6 +49,10 @@ interface WorkspaceState {
 }
 
 export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
+  // ── Room Dimensions ──
+  roomDims: { w: 4, l: 4, h: 2.5 },
+  setRoomDims: (dims) => set((state) => ({ roomDims: { ...state.roomDims, ...dims } })),
+
   // ── Camera ──
   cameraPreset: "overview",
   setCameraPreset: (preset) => set({ cameraPreset: preset }),
@@ -119,6 +127,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
       selectedKeyboard: "kb_1",
       selectedMouse: "mouse_1",
       selectedAccessories: ["bonsai"],
+      roomDims: { w: 4, l: 4, h: 2.5 },
     }),
 
   // ── Derived ──

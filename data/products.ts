@@ -510,9 +510,9 @@ export const PRODUCTS: Product[] = [
     category: "toy",
     modelPath: "/gbl/accessories/lesiakower-vending-1586.glb",
     scale: 0.08,
-    rotation: [0, 0, 0],
+    rotation: [0, Math.PI + 1.87, 0],
     thumbnail: "/images/vendingImage.png",
-    positionOffset: [-3.4, -0.97, -0.2],
+    positionOffset: [-2.0, -0.97, -2],
   },
   {
     id: "radar",

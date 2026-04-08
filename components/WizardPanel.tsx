@@ -78,7 +78,7 @@ export const StepIndicators = () => {
           aria-label={step.label}
         />
       ))}
-      <span className="ml-3 text-xs font-semibold text-monis-orange uppercase tracking-widest">
+      <span className="ml-auto text-xs font-semibold text-monis-orange uppercase tracking-widest">
         Step {currentIndex + 1} of {STEPS.length}
       </span>
     </div>

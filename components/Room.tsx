@@ -1,213 +1,244 @@
 "use client";
 
 import * as THREE from "three";
+import { useMemo } from "react";
 
 // ── Palette ──────────────────────────────────────────────────────────────────
-const WALL_COLOR    = "#f7f0e4";   // warm linen
-const WALL_SIDE_COLOR = "#f2ebe0"; // very slightly warmer side walls
-const CEILING_COLOR = "#f9f5ee";   // near-white ceiling
-const FLOOR_COLOR   = "#c9956d";   // honey-oak wood (base)
-const FLOOR_DARK    = "#c08b63";   // alternating plank stripe
-const BASEBOARD_COLOR = "#d9c9a8"; // light tan trim
-const FRAME_COLOR   = "#b8966a";   // natural wood frame
-const GLASS_COLOR   = "#93cfe8";   // sky blue
-const SKY_GLOW      = "#d4ecf7";   // soft window glow
+const WALL_COLOR      = "#c8c8c8";   // medium gray
+const FLOOR_COLOR     = "#d4d4d4";   // light neutral floor
+const FLOOR_DARK      = "#c8c8c8";   // alternating plank stripe
+const BASEBOARD_COLOR = "#b8b8b8";   // subtle trim
+const GLASS_COLOR     = "#c8dce8";   // window glass
+const SKY_GLOW        = "#ddeef7";   // window sky
+const CURTAIN_COLOR   = "#7a7a8a";   // dark charcoal curtain
+const CURTAIN_ROD     = "#b0a090";   // warm metal rod
 
-const Room = () => {
-  // Plank widths — 10 strips across 8 units, each 0.8 wide
-  const PLANK_COUNT = 10;
-  const PLANK_W     = 0.8;
+const THICKNESS = 0.22; // wall thickness
+const PLANK_COUNT = 10;
+
+// Window definition (on left wall, z-axis)
+const WIN_OFFSET  = 0.8;  // units from back wall
+const WIN_Z_LEN   = 2.4;  // width of window
+const WIN_Y_BOT   = 0.8;  // sill height
+
+// ── Helper: accordion-pleat curtain panel ────────────────────────────────────
+const CurtainPanel = ({
+  x,
+  yTop,
+  yBot,
+  zFrom,
+  zTo,
+  color,
+}: {
+  x: number;
+  yTop: number;
+  yBot: number;
+  zFrom: number;
+  zTo: number;
+  color: string;
+}) => {
+  const N = 8;
+  const foldZ  = (zTo - zFrom) / N;
+  const h      = yTop - yBot;
+  const cy     = yBot + h / 2;
+  const DEPTH  = 0.055;
+
+  return (
+    <group>
+      {Array.from({ length: N }, (_, i) => {
+        const zc   = zFrom + i * foldZ + foldZ / 2;
+        const xOff = i % 2 === 0 ? 0 : DEPTH;
+        return (
+          <mesh key={i} position={[x + xOff, cy, zc]} castShadow receiveShadow>
+            <boxGeometry args={[DEPTH + 0.01, h, foldZ - 0.004]} />
+            <meshStandardMaterial color={color} roughness={0.97} metalness={0} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+};
+
+// ── Room ──────────────────────────────────────────────────────────────────────
+const Room = ({
+  width  = 8,
+  length = 6.5,
+  height = 4,
+}: {
+  width: number;
+  length: number;
+  height: number;
+}) => {
+  const plankW = width / PLANK_COUNT;
+  const halfW  = width  / 2;
+  const halfL  = length / 2;
+  const T      = THICKNESS;
+
+  const wallSolid = useMemo(() => new THREE.MeshStandardMaterial({ color: WALL_COLOR, roughness: 0.9, metalness: 0, side: THREE.DoubleSide }), []);
+
+  // Window bounds on left wall
+  const winZ0     = -halfL + WIN_OFFSET;
+  const winZ1     = winZ0 + WIN_Z_LEN;
+  const winY1     = height - 0.35;
+  const winH      = winY1 - WIN_Y_BOT;
+  const winCenterZ = (winZ0 + winZ1) / 2;
+  const winCenterY = (WIN_Y_BOT + winY1) / 2;
+
+  // Left-wall section lengths (around window cutout)
+  const behindLen = winZ0 - (-halfL);   // wall from back to window start
+  const frontLen  = halfL - winZ1;      // wall from window end to front
+
+  // Curtain panel extents (smaller panels to leave glass exposed in the center)
+  const curtainW = 0.65; // Fixed smaller width for each curtain
+  const cLeftZ0  = winZ0 - 0.1;
+  const cLeftZ1  = winZ0 + curtainW;
+  const cRightZ0 = winZ1 - curtainW;
+  const cRightZ1 = winZ1 + 0.1;
+  const cYTop    = height - 0.1;
 
   return (
     <group>
 
-      {/* ── Floor — honey oak planks ── */}
+      {/* ── Floor — planks ── */}
       {Array.from({ length: PLANK_COUNT }, (_, i) => (
         <mesh
           key={`plank-${i}`}
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[i * PLANK_W - (PLANK_COUNT * PLANK_W) / 2 + PLANK_W / 2, 0, 0]}
+          position={[i * plankW - halfW + plankW / 2, 0, 0]}
           receiveShadow
         >
-          <planeGeometry args={[PLANK_W - 0.01, 8]} />
+          <planeGeometry args={[plankW - 0.01, length]} />
           <meshStandardMaterial
             color={i % 2 === 0 ? FLOOR_COLOR : FLOOR_DARK}
-            roughness={0.82}
-            metalness={0.02}
+            roughness={0.85}
+            metalness={0}
           />
         </mesh>
       ))}
 
-      {/* Thin grout lines between planks */}
+      {/* Grout lines */}
       {Array.from({ length: PLANK_COUNT - 1 }, (_, i) => (
         <mesh
           key={`grout-${i}`}
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[i * PLANK_W - (PLANK_COUNT * PLANK_W) / 2 + PLANK_W, 0.001, 0]}
+          position={[i * plankW - halfW + plankW, 0.001, 0]}
           receiveShadow
         >
-          <planeGeometry args={[0.012, 8]} />
-          <meshStandardMaterial color="#a8784e" roughness={1} />
+          <planeGeometry args={[0.008, length]} />
+          <meshStandardMaterial color="#bbbbbb" roughness={1} />
         </mesh>
       ))}
 
-      {/* ── Back wall ── */}
-      <mesh position={[0, 2, -2.5]} receiveShadow castShadow>
-        <planeGeometry args={[8, 5]} />
-        <meshStandardMaterial color={WALL_COLOR} roughness={0.92} metalness={0} />
-      </mesh>
-
-      {/* ── Left wall ── */}
-      <mesh position={[-4, 2, 0.75]} rotation={[0, Math.PI / 2, 0]} receiveShadow castShadow>
-        <planeGeometry args={[6.5, 5]} />
-        <meshStandardMaterial color={WALL_SIDE_COLOR} roughness={0.92} metalness={0} />
+      {/* ── Back wall (thick box, spans full width + side wall thickness) ── */}
+      <mesh position={[0, height / 2, -halfL - T / 2]} receiveShadow castShadow>
+        <boxGeometry args={[width + T * 2, height, T]} />
+        <meshStandardMaterial color={WALL_COLOR} roughness={0.9} metalness={0} side={THREE.DoubleSide} />
       </mesh>
 
       {/* ── Right wall ── */}
-      <mesh position={[4, 2, 0.75]} rotation={[0, -Math.PI / 2, 0]} receiveShadow castShadow>
-        <planeGeometry args={[6.5, 5]} />
-        <meshStandardMaterial color={WALL_SIDE_COLOR} roughness={0.92} metalness={0} />
+      <mesh material={wallSolid} position={[halfW + T / 2, height / 2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[T, height, length]} />
       </mesh>
 
-      {/* ── Ceiling ── */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 4, 0.75]}>
-        <planeGeometry args={[8, 6.5]} />
-        <meshStandardMaterial color={CEILING_COLOR} roughness={1} metalness={0} />
+      {/* ── Left wall — 4 sections around window cutout ── */}
+
+      {/* Bottom strip (full length) */}
+      <mesh position={[-halfW - T / 2, WIN_Y_BOT / 2, 0]}>
+        <boxGeometry args={[T, WIN_Y_BOT, length]} />
+        <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* ── Baseboard — back wall ── */}
-      <mesh position={[0, 0.055, -2.47]}>
-        <boxGeometry args={[8, 0.11, 0.04]} />
+      {/* Top strip (full length) */}
+      <mesh position={[-halfW - T / 2, winY1 + (height - winY1) / 2, 0]}>
+        <boxGeometry args={[T, height - winY1, length]} />
+        <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
+      </mesh>
+
+      {/* Back-side pillar (behind window, between back wall and window start) */}
+      {behindLen > 0.001 && (
+        <mesh position={[-halfW - T / 2, winCenterY, -halfL + behindLen / 2]}>
+          <boxGeometry args={[T, winH, behindLen]} />
+          <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
+        </mesh>
+      )}
+
+      {/* Front-side pillar (in front of window, between window end and open front) */}
+      {frontLen > 0.001 && (
+        <mesh position={[-halfW - T / 2, winCenterY, winZ1 + frontLen / 2]}>
+          <boxGeometry args={[T, winH, frontLen]} />
+          <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
+        </mesh>
+      )}
+
+      {/* ── Window glass ── */}
+      <mesh position={[-halfW + 0.01, winCenterY, winCenterZ]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[WIN_Z_LEN, winH]} />
+        <meshPhysicalMaterial
+          color={GLASS_COLOR}
+          transparent
+          opacity={0.3}
+          roughness={0.04}
+          metalness={0}
+        />
+      </mesh>
+
+      {/* Sky glow behind glass */}
+      <mesh position={[-halfW - 0.05, winCenterY, winCenterZ]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[WIN_Z_LEN, winH]} />
+        <meshBasicMaterial color={SKY_GLOW} side={THREE.FrontSide} />
+      </mesh>
+
+      {/* Window sill */}
+      <mesh position={[-halfW - T / 2, WIN_Y_BOT - 0.04, winCenterZ]}>
+        <boxGeometry args={[T + 0.14, 0.06, WIN_Z_LEN + 0.08]} />
+        <meshStandardMaterial color="#d4cfc8" roughness={0.55} metalness={0} />
+      </mesh>
+
+      {/* ── Curtain rod ── */}
+      <mesh
+        position={[-halfW + 0.07, cYTop - 0.02, winCenterZ]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <cylinderGeometry args={[0.022, 0.022, WIN_Z_LEN + 0.6, 12]} />
+        <meshStandardMaterial color={CURTAIN_ROD} metalness={0.45} roughness={0.4} />
+      </mesh>
+
+      {/* Rod finials */}
+      {[winZ0 - 0.22, winZ1 + 0.22].map((z, i) => (
+        <mesh key={`fin-${i}`} position={[-halfW + 0.07, cYTop - 0.02, z]}>
+          <sphereGeometry args={[0.035, 10, 8]} />
+          <meshStandardMaterial color={CURTAIN_ROD} metalness={0.5} roughness={0.35} />
+        </mesh>
+      ))}
+
+      {/* ── Curtain panels ── */}
+      <CurtainPanel
+        x={-halfW + 0.03}
+        yTop={cYTop}
+        yBot={0.04}
+        zFrom={cLeftZ0}
+        zTo={cLeftZ1}
+        color={CURTAIN_COLOR}
+      />
+      <CurtainPanel
+        x={-halfW + 0.03}
+        yTop={cYTop}
+        yBot={0.04}
+        zFrom={cRightZ0}
+        zTo={cRightZ1}
+        color={CURTAIN_COLOR}
+      />
+
+      {/* ── Baseboards ── */}
+      {/* Back wall */}
+      <mesh position={[0, 0.055, -halfL + 0.01]}>
+        <boxGeometry args={[width, 0.1, 0.035]} />
         <meshStandardMaterial color={BASEBOARD_COLOR} roughness={0.7} />
       </mesh>
 
-      {/* ── Baseboard — left wall ── */}
-      <mesh position={[-3.97, 0.055, 0.75]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[6.5, 0.11, 0.04]} />
-        <meshStandardMaterial color={BASEBOARD_COLOR} roughness={0.7} />
-      </mesh>
-
-      {/* ── Baseboard — right wall ── */}
-      <mesh position={[3.97, 0.055, 0.75]} rotation={[0, -Math.PI / 2, 0]}>
-        <boxGeometry args={[6.5, 0.11, 0.04]} />
-        <meshStandardMaterial color={BASEBOARD_COLOR} roughness={0.7} />
-      </mesh>
-
-      {/* ═══ Window — back wall, left of center ═══ */}
-      <group position={[-1.5, 2.3, -2.46]}>
-
-        {/* Sky glow behind window */}
-        <mesh position={[0, 0, -0.02]}>
-          <planeGeometry args={[2.0, 2.2]} />
-          <meshBasicMaterial color={SKY_GLOW} />
-        </mesh>
-
-        {/* Outer frame */}
-        <mesh>
-          <boxGeometry args={[2.1, 2.3, 0.06]} />
-          <meshStandardMaterial color={FRAME_COLOR} roughness={0.45} metalness={0.05} />
-        </mesh>
-
-        {/* Glass pane — 4 panes (2×2) */}
-        {[[-0.49, 0.52], [0.49, 0.52], [-0.49, -0.52], [0.49, -0.52]].map(([px, py], i) => (
-          <mesh key={i} position={[px, py, 0.04]}>
-            <planeGeometry args={[0.88, 0.96]} />
-            <meshPhysicalMaterial
-              color={GLASS_COLOR}
-              transparent
-              opacity={0.55}
-              roughness={0.05}
-              metalness={0}
-              envMapIntensity={0.5}
-            />
-          </mesh>
-        ))}
-
-        {/* Horizontal mullion */}
-        <mesh position={[0, 0, 0.05]}>
-          <boxGeometry args={[2.0, 0.045, 0.04]} />
-          <meshStandardMaterial color={FRAME_COLOR} roughness={0.45} />
-        </mesh>
-
-        {/* Vertical mullion */}
-        <mesh position={[0, 0, 0.05]}>
-          <boxGeometry args={[0.045, 2.2, 0.04]} />
-          <meshStandardMaterial color={FRAME_COLOR} roughness={0.45} />
-        </mesh>
-
-        {/* Tropical silhouette — palm trunk */}
-        <mesh position={[0.55, -0.55, 0.01]} rotation={[0, 0, 0.08]}>
-          <cylinderGeometry args={[0.025, 0.04, 1.2, 8]} />
-          <meshBasicMaterial color="#3d6b4f" transparent opacity={0.25} />
-        </mesh>
-
-        {/* Palm leaves */}
-        {[0, 55, 115, 175, 240, 300].map((deg, i) => (
-          <mesh
-            key={i}
-            position={[
-              0.55 + Math.cos((deg * Math.PI) / 180) * 0.22,
-              0.22 + Math.sin(Math.abs((deg - 90) * Math.PI) / 180) * 0.1,
-              0.01,
-            ]}
-            rotation={[0, 0, ((deg - 90) * Math.PI) / 180]}
-          >
-            <planeGeometry args={[0.38, 0.07]} />
-            <meshBasicMaterial
-              color="#3d6b4f"
-              transparent
-              opacity={0.22}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        ))}
-      </group>
-
-      {/* ── Second smaller window — right side of back wall ── */}
-      <group position={[2.4, 2.5, -2.46]}>
-        {/* Sky glow */}
-        <mesh position={[0, 0, -0.02]}>
-          <planeGeometry args={[1.1, 1.4]} />
-          <meshBasicMaterial color={SKY_GLOW} />
-        </mesh>
-
-        {/* Frame */}
-        <mesh>
-          <boxGeometry args={[1.2, 1.5, 0.06]} />
-          <meshStandardMaterial color={FRAME_COLOR} roughness={0.45} />
-        </mesh>
-
-        {/* Single pane glass */}
-        <mesh position={[0, 0, 0.04]}>
-          <planeGeometry args={[1.08, 1.38]} />
-          <meshPhysicalMaterial
-            color={GLASS_COLOR}
-            transparent
-            opacity={0.5}
-            roughness={0.05}
-          />
-        </mesh>
-
-        {/* Cross */}
-        <mesh position={[0, 0, 0.05]}>
-          <boxGeometry args={[1.1, 0.04, 0.03]} />
-          <meshStandardMaterial color={FRAME_COLOR} roughness={0.45} />
-        </mesh>
-        <mesh position={[0, 0, 0.05]}>
-          <boxGeometry args={[0.04, 1.42, 0.03]} />
-          <meshStandardMaterial color={FRAME_COLOR} roughness={0.45} />
-        </mesh>
-      </group>
-
-      {/* ── Ceiling light recess (simple shallow box) ── */}
-      <mesh position={[0, 3.95, 0.5]}>
-        <boxGeometry args={[1.2, 0.04, 0.6]} />
-        <meshStandardMaterial color="#e8e0d0" roughness={0.9} />
-      </mesh>
-
-      {/* Subtle wall shadow/depth trim — top of back wall (crown) */}
-      <mesh position={[0, 3.95, -2.47]}>
-        <boxGeometry args={[8, 0.08, 0.06]} />
+      {/* Right wall */}
+      <mesh position={[halfW - 0.01, 0.055, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <boxGeometry args={[length, 0.1, 0.035]} />
         <meshStandardMaterial color={BASEBOARD_COLOR} roughness={0.7} />
       </mesh>
 

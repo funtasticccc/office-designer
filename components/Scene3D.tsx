@@ -6,8 +6,11 @@ import { Suspense } from "react";
 import * as THREE from "three";
 import Room from "./Room";
 import WorkspaceItems from "./WorkspaceItems";
+import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 
 const Scene3D = () => {
+  const roomDims = useWorkspaceStore((s) => s.roomDims);
+
   return (
     <Canvas
       dpr={[1, 2]}
@@ -25,14 +28,14 @@ const Scene3D = () => {
           guaranteed no black patches regardless of camera angle. */}
       <mesh>
         <sphereGeometry args={[40, 32, 16]} />
-        <meshBasicMaterial color="#f2ece0" side={THREE.BackSide} />
+        <meshBasicMaterial color="#e8e8e8" side={THREE.BackSide} />
       </mesh>
 
       {/* Lighting */}
-      <ambientLight intensity={0.65} color="#fff5e8" />
+      <ambientLight intensity={0.7} color="#f0f0f0" />
       <directionalLight
-        position={[3, 7, 4]}
-        intensity={1.3}
+        position={[3, 8, 4]}
+        intensity={1.1}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -42,15 +45,13 @@ const Scene3D = () => {
         shadow-camera-top={6}
         shadow-camera-bottom={-6}
       />
-      {/* Soft bounce from the left wall */}
-      <directionalLight position={[-5, 3, 1]} intensity={0.25} color="#ffe8d0" />
-      {/* Cool fill from front-right (simulates ceiling bounce) */}
-      <directionalLight position={[4, 5, 6]} intensity={0.2} color="#e8f0ff" />
+      {/* Fill from above (open ceiling — sky fill) */}
+      <directionalLight position={[0, 10, 0]} intensity={0.35} color="#e8eeff" />
+      {/* Soft fill from front */}
+      <directionalLight position={[4, 4, 7]} intensity={0.2} color="#ffffff" />
 
-      {/* Warm window light — left window position */}
-      <pointLight position={[-1.5, 3, -2]} intensity={1.2} color="#fff0d8" distance={8} decay={2} />
-      {/* Secondary warm fill from right window */}
-      <pointLight position={[2.4, 3.5, -2]} intensity={0.6} color="#ffecc8" distance={6} decay={2} />
+      {/* Left-wall window light */}
+      <pointLight position={[-3, 2.5, -1.5]} intensity={1.4} color="#ddeeff" distance={10} decay={2} />
 
       {/* Environment for PBR reflections — no background, just lighting */}
       <Environment preset="apartment" background={false} />
@@ -66,22 +67,20 @@ const Scene3D = () => {
 
       <Suspense fallback={null}>
         {/* Room shell */}
-        <Room />
+        <Room width={roomDims.w} length={roomDims.l} height={roomDims.h} />
 
         {/* Dynamic workspace items */}
         <WorkspaceItems />
       </Suspense>
 
-      {/* Camera controls — constrained to stay inside the room */}
+      {/* Camera controls — full 360° horizontal orbit */}
       <OrbitControls
         makeDefault
         enablePan={false}
         minDistance={2}
-        maxDistance={7}
-        minPolarAngle={Math.PI / 2.7}   // ~66° from zenith — camera stays below ceiling (y=4)
-        maxPolarAngle={Math.PI / 2.15}  // stays above floor level
-        minAzimuthAngle={-Math.PI * 0.5}
-        maxAzimuthAngle={Math.PI * 0.5}
+        maxDistance={10}
+        minPolarAngle={Math.PI / 6}
+        maxPolarAngle={Math.PI / 2.05}
         target={[0, 0.8, 0]}
         enableDamping
         dampingFactor={0.05}
