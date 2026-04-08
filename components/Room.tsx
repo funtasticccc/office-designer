@@ -17,8 +17,8 @@ const THICKNESS = 0.22; // wall thickness
 const PLANK_COUNT = 10;
 
 // Window definition (on left wall, z-axis)
-const WIN_OFFSET  = 0.7;  // units from back wall
-const WIN_Z_LEN   = 1.6;  // width of window
+const WIN_OFFSET  = 0.8;  // units from back wall
+const WIN_Z_LEN   = 2.4;  // width of window
 const WIN_Y_BOT   = 0.8;  // sill height
 
 // ── Helper: accordion-pleat curtain panel ────────────────────────────────────
@@ -88,8 +88,8 @@ const Room = ({
   const behindLen = winZ0 - (-halfL);   // wall from back to window start
   const frontLen  = halfL - winZ1;      // wall from window end to front
 
-  // Curtain panel extents (each panel covers ~65% of window + slightly beyond)
-  const curtainW = WIN_Z_LEN * 0.6;
+  // Curtain panel extents (smaller panels to leave glass exposed in the center)
+  const curtainW = 0.65; // Fixed smaller width for each curtain
   const cLeftZ0  = winZ0 - 0.1;
   const cLeftZ1  = winZ0 + curtainW;
   const cRightZ0 = winZ1 - curtainW;
