@@ -7,7 +7,6 @@ import { useMemo } from "react";
 const WALL_COLOR      = "#c8c8c8";   // medium gray
 const FLOOR_COLOR     = "#d4d4d4";   // light neutral floor
 const FLOOR_DARK      = "#c8c8c8";   // alternating plank stripe
-const BASEBOARD_COLOR = "#b8b8b8";   // subtle trim
 const GLASS_COLOR     = "#c8dce8";   // window glass
 const SKY_GLOW        = "#ddeef7";   // window sky
 const CURTAIN_COLOR   = "#7a7a8a";   // dark charcoal curtain
@@ -29,6 +28,7 @@ const CurtainPanel = ({
   zFrom,
   zTo,
   color,
+  wallGroup,
 }: {
   x: number;
   yTop: number;
@@ -36,6 +36,7 @@ const CurtainPanel = ({
   zFrom: number;
   zTo: number;
   color: string;
+  wallGroup?: string;
 }) => {
   const N = 8;
   const foldZ  = (zTo - zFrom) / N;
@@ -49,7 +50,13 @@ const CurtainPanel = ({
         const zc   = zFrom + i * foldZ + foldZ / 2;
         const xOff = i % 2 === 0 ? 0 : DEPTH;
         return (
-          <mesh key={i} position={[x + xOff, cy, zc]} castShadow receiveShadow>
+          <mesh
+            key={i}
+            position={[x + xOff, cy, zc]}
+            castShadow
+            receiveShadow
+            userData={wallGroup ? { wallGroup } : {}}
+          >
             <boxGeometry args={[DEPTH + 0.01, h, foldZ - 0.004]} />
             <meshStandardMaterial color={color} roughness={0.97} metalness={0} />
           </mesh>
@@ -129,34 +136,59 @@ const Room = ({
         </mesh>
       ))}
 
-      {/* ── Back wall (thick box, spans full width + side wall thickness) ── */}
-      <mesh position={[0, height / 2, -halfL - T / 2]} receiveShadow castShadow>
+      {/* ── Back wall ── */}
+      <mesh
+        position={[0, height / 2, -halfL - T / 2]}
+        receiveShadow
+        castShadow
+        userData={{ wallGroup: "back" }}
+      >
+        <boxGeometry args={[width + T * 2, height, T]} />
+        <meshStandardMaterial color={WALL_COLOR} roughness={0.9} metalness={0} side={THREE.DoubleSide} />
+      </mesh>
+
+      {/* ── Front wall (ghosts when camera is in front of the room) ── */}
+      <mesh
+        position={[0, height / 2, halfL + T / 2]}
+        receiveShadow
+        castShadow
+        userData={{ wallGroup: "front" }}
+      >
         <boxGeometry args={[width + T * 2, height, T]} />
         <meshStandardMaterial color={WALL_COLOR} roughness={0.9} metalness={0} side={THREE.DoubleSide} />
       </mesh>
 
       {/* ── Right wall ── */}
-      <mesh material={wallSolid} position={[halfW + T / 2, height / 2, 0]} receiveShadow castShadow>
+      <mesh
+        material={wallSolid}
+        position={[halfW + T / 2, height / 2, 0]}
+        receiveShadow
+        castShadow
+        userData={{ wallGroup: "right" }}
+      >
         <boxGeometry args={[T, height, length]} />
       </mesh>
 
       {/* ── Left wall — 4 sections around window cutout ── */}
 
       {/* Bottom strip (full length) */}
-      <mesh position={[-halfW - T / 2, WIN_Y_BOT / 2, 0]}>
+      <mesh position={[-halfW - T / 2, WIN_Y_BOT / 2, 0]} userData={{ wallGroup: "left" }}>
         <boxGeometry args={[T, WIN_Y_BOT, length]} />
         <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Top strip (full length) */}
-      <mesh position={[-halfW - T / 2, winY1 + (height - winY1) / 2, 0]}>
+      <mesh position={[-halfW - T / 2, winY1 + (height - winY1) / 2, 0]} userData={{ wallGroup: "left" }}>
         <boxGeometry args={[T, height - winY1, length]} />
         <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Back-side pillar (behind window, between back wall and window start) */}
       {behindLen > 0.001 && (
-        <mesh position={[-halfW - T / 2, winCenterY, -halfL + behindLen / 2]}>
+        <mesh
+          position={[-halfW - T / 2, winCenterY, -halfL + behindLen / 2]}
+          userData={{ wallGroup: "left" }}
+        >
           <boxGeometry args={[T, winH, behindLen]} />
           <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
         </mesh>
@@ -164,7 +196,10 @@ const Room = ({
 
       {/* Front-side pillar (in front of window, between window end and open front) */}
       {frontLen > 0.001 && (
-        <mesh position={[-halfW - T / 2, winCenterY, winZ1 + frontLen / 2]}>
+        <mesh
+          position={[-halfW - T / 2, winCenterY, winZ1 + frontLen / 2]}
+          userData={{ wallGroup: "left" }}
+        >
           <boxGeometry args={[T, winH, frontLen]} />
           <meshStandardMaterial color={WALL_COLOR} roughness={0.9} side={THREE.DoubleSide} />
         </mesh>
@@ -198,6 +233,7 @@ const Room = ({
       <mesh
         position={[-halfW + 0.07, cYTop - 0.02, winCenterZ]}
         rotation={[Math.PI / 2, 0, 0]}
+        userData={{ wallGroup: "left" }}
       >
         <cylinderGeometry args={[0.022, 0.022, WIN_Z_LEN + 0.6, 12]} />
         <meshStandardMaterial color={CURTAIN_ROD} metalness={0.45} roughness={0.4} />
@@ -205,7 +241,7 @@ const Room = ({
 
       {/* Rod finials */}
       {[winZ0 - 0.22, winZ1 + 0.22].map((z, i) => (
-        <mesh key={`fin-${i}`} position={[-halfW + 0.07, cYTop - 0.02, z]}>
+        <mesh key={`fin-${i}`} position={[-halfW + 0.07, cYTop - 0.02, z]} userData={{ wallGroup: "left" }}>
           <sphereGeometry args={[0.035, 10, 8]} />
           <meshStandardMaterial color={CURTAIN_ROD} metalness={0.5} roughness={0.35} />
         </mesh>
@@ -219,6 +255,7 @@ const Room = ({
         zFrom={cLeftZ0}
         zTo={cLeftZ1}
         color={CURTAIN_COLOR}
+        wallGroup="left"
       />
       <CurtainPanel
         x={-halfW + 0.03}
@@ -227,19 +264,18 @@ const Room = ({
         zFrom={cRightZ0}
         zTo={cRightZ1}
         color={CURTAIN_COLOR}
+        wallGroup="left"
       />
 
-      {/* ── Baseboards ── */}
-      {/* Back wall */}
-      <mesh position={[0, 0.055, -halfL + 0.01]}>
-        <boxGeometry args={[width, 0.1, 0.035]} />
-        <meshStandardMaterial color={BASEBOARD_COLOR} roughness={0.7} />
-      </mesh>
-
-      {/* Right wall */}
-      <mesh position={[halfW - 0.01, 0.055, 0]} rotation={[0, -Math.PI / 2, 0]}>
-        <boxGeometry args={[length, 0.1, 0.035]} />
-        <meshStandardMaterial color={BASEBOARD_COLOR} roughness={0.7} />
+      {/* ── Ceiling ── */}
+      <mesh
+        position={[0, height, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
+        receiveShadow
+        userData={{ wallGroup: "ceiling" }}
+      >
+        <planeGeometry args={[width + T * 2, length + T * 2]} />
+        <meshStandardMaterial color={WALL_COLOR} roughness={0.9} metalness={0} side={THREE.DoubleSide} />
       </mesh>
 
     </group>

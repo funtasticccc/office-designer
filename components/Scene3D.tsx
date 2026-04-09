@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import * as THREE from "three";
 import Room from "./Room";
 import WorkspaceItems from "./WorkspaceItems";
+import WallGhostController from "./WallGhostController";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 
 const Scene3D = () => {
@@ -28,7 +29,7 @@ const Scene3D = () => {
           guaranteed no black patches regardless of camera angle. */}
       <mesh>
         <sphereGeometry args={[40, 32, 16]} />
-        <meshBasicMaterial color="#e8e8e8" side={THREE.BackSide} />
+        <meshBasicMaterial color="#c2c2c2" side={THREE.BackSide} />
       </mesh>
 
       {/* Lighting */}
@@ -72,6 +73,9 @@ const Scene3D = () => {
         {/* Dynamic workspace items */}
         <WorkspaceItems />
       </Suspense>
+
+      {/* Ghost whichever wall is blocking the camera's view of the room interior */}
+      <WallGhostController />
 
       {/* Camera controls — full 360° horizontal orbit */}
       <OrbitControls
