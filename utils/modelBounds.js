@@ -79,4 +79,38 @@ async function printGltfBounds(filePaths) {
   }
 }
 
-module.exports = { readGlbBounds, getGltfBounds, printGlbBounds, printGltfBounds };
+/**
+ * Reads a .glb file and returns its nodes and per-mesh POSITION accessor bounds.
+ *
+ * @param {string} filePath - Path to the .glb file
+ * @returns {{ nodes: object[], meshMins: number[][], meshMaxs: number[][] } | { error: string }}
+ */
+function readGlbNodes(filePath) {
+  const buf = fs.readFileSync(filePath);
+  const jsonLen = buf.readUInt32LE(12);
+  const jsonBuf = buf.subarray(20, 20 + jsonLen);
+  const jsonObj = JSON.parse(jsonBuf.toString("utf8"));
+
+  if (!jsonObj.accessors) return { error: "No accessors" };
+
+  const meshMins = [];
+  const meshMaxs = [];
+
+  if (jsonObj.meshes) {
+    for (const mesh of jsonObj.meshes) {
+      if (mesh.primitives) {
+        for (const prim of mesh.primitives) {
+          if (prim.attributes.POSITION !== undefined) {
+            const acc = jsonObj.accessors[prim.attributes.POSITION];
+            meshMins.push(acc.min);
+            meshMaxs.push(acc.max);
+          }
+        }
+      }
+    }
+  }
+
+  return { nodes: jsonObj.nodes || [], meshMins, meshMaxs };
+}
+
+module.exports = { readGlbBounds, getGltfBounds, printGlbBounds, printGltfBounds, readGlbNodes };
