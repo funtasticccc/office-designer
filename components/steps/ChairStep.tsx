@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { getProductsByCategory } from "@/data/products";
 import { formatPrice } from "@/utils/format";
@@ -31,12 +32,15 @@ const ChairStep = () => {
             )}
 
             {/* Thumbnail */}
-            <div className="w-full aspect-square rounded-2xl bg-monis-sand/40 flex items-center justify-center mb-4 overflow-hidden shadow-inner">
-              <img
-                src={chair.thumbnail}
-                alt={chair.name}
-                className="w-full h-full object-contain p-3"
-              />
+            <div className="relative w-full aspect-square rounded-2xl bg-monis-sand/40 mb-4 overflow-hidden shadow-inner">
+              <div className="absolute inset-3">
+                <Image
+                  src={chair.thumbnail}
+                  alt={chair.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
 
             {/* Info Group */}

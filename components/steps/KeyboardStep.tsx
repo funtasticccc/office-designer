@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { getProductsByCategory } from "@/data/products";
 import { formatPrice } from "@/utils/format";
@@ -41,11 +42,12 @@ const KeyboardStep = () => {
             )}
 
             {/* Thumbnail */}
-            <div className="w-20 h-20 rounded-2xl bg-monis-sand/60 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-inner">
-              <img
+            <div className="relative w-20 h-20 rounded-2xl bg-monis-sand/60 flex-shrink-0 overflow-hidden shadow-inner">
+              <Image
                 src={keyboard.thumbnail}
                 alt={keyboard.name}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
 
