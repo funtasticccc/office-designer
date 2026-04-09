@@ -2,7 +2,7 @@
 
 An interactive 3D workspace configurator for [monis.rent](https://monis.rent), built for digital nomads and startups in Bali. Design your dream remote workspace, see it come to life in 3D, and rent everything with one click.
 
-**Live Demo:** [office-designer-rdp64yd76-andras-projects-6a803db5.vercel.app](https://office-designer-rdp64yd76-andras-projects-6a803db5.vercel.app/)
+**Live Demo:** [office-designer.vercel.app](office-designer.vercel.app)
 
 ---
 
