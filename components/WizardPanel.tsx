@@ -91,7 +91,7 @@ export const StepTitle = () => {
 
   return (
     <div className="mb-6">
-      <h1 className="font-display text-3xl lg:text-4xl text-monis-charcoal leading-tight pt-3">
+      <h1 className="font-display text-3xl md:text-4xl text-monis-charcoal leading-tight pt-3">
         {header.title}
       </h1>
       <p className="mt-2 text-sm text-monis-charcoal/50 leading-relaxed max-w-md">

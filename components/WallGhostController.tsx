@@ -21,7 +21,7 @@ import { useWorkspaceStore } from "@/store/useWorkspaceStore";
  *   "ceiling" – ceiling    (camera.y >  height)
  */
 
-const GHOST_OPACITY = 0.06;
+const GHOST_OPACITY = 0.0;
 const LERP_SPEED    = 0.12;
 
 const WallGhostController = () => {

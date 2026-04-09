@@ -29,11 +29,11 @@ const Scene3D = () => {
           guaranteed no black patches regardless of camera angle. */}
       <mesh>
         <sphereGeometry args={[40, 32, 16]} />
-        <meshBasicMaterial color="#c2c2c2" side={THREE.BackSide} />
+        <meshBasicMaterial color="#cec8be" side={THREE.BackSide} />
       </mesh>
 
       {/* Lighting */}
-      <ambientLight intensity={0.7} color="#f0f0f0" />
+      <ambientLight intensity={0.7} color="#f5f0e8" />
       <directionalLight
         position={[3, 8, 4]}
         intensity={1.1}

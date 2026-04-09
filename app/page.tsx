@@ -69,9 +69,9 @@ const HomePage = () => {
 
       {/* Main content */}
       <main className="pt-16 pb-24">
-        <div className="relative flex flex-col lg:flex-row min-h-[calc(100vh-10rem)]">
+        <div className="relative flex flex-col md:flex-row min-h-[calc(100vh-10rem)]">
           {/* ── 3D Scene (left on desktop, top on mobile) ── */}
-          <div className="hidden lg:flex w-full lg:w-[55%] xl:w-[60%] sticky top-16 z-10 lg:h-[calc(100vh-10.5rem)] px-4 lg:pl-8 lg:pr-4">
+          <div className="hidden md:flex w-full md:w-[55%] xl:w-[60%] sticky top-16 z-10 md:h-[calc(100vh-10.5rem)] px-4 md:pl-8 md:pr-4">
             <div className={`canvas-container relative group h-[500px] sm:h-[600px] lg:h-full overflow-hidden bg-white/50 backdrop-blur-sm shadow-xl shadow-monis-charcoal/5 interaction-container ${isFullscreen ? 'rounded-none border-none' : 'rounded-3xl border border-monis-sand'}`}>
               {/* Toolbar (Top Right) */}
               <div className="absolute top-4 right-4 z-20 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -112,11 +112,11 @@ const HomePage = () => {
           </div>
 
           {/* ── Wizard Panel (right on desktop, below on mobile) ── */}
-          <div className="w-full lg:w-[45%] xl:w-[40%] px-4 lg:pl-4 lg:pr-8 flex flex-col h-[calc(100vh-4rem)] sm:h-[calc(100vh-5rem)] lg:sticky lg:top-16 lg:h-[calc(100vh-10.5rem)] lg:overflow-hidden">
+          <div className="w-full md:w-[45%] xl:w-[40%] px-4 md:pl-4 md:pr-8 flex flex-col h-[calc(100vh-4rem)] md:sticky md:top-16 md:h-[calc(100vh-10.5rem)] md:overflow-hidden">
             {/* Image + Step Indicators (STICKY on mobile only) */}
-            <div className="lg:static sticky top-16 z-20 bg-monis-cream mb-4 block lg:hidden flex-shrink-0 pb-4">
+            <div className="md:static sticky top-16 z-20 bg-monis-cream mb-4 block md:hidden flex-shrink-0 pb-4">
               {/* Image Preview 1:1 on mobile ONLY */}
-              <div className={`w-full aspect-square overflow-hidden mb-4 canvas-container relative bg-white/50 backdrop-blur-sm shadow-xl shadow-monis-charcoal/5 interaction-container ${isFullscreen ? 'rounded-none border-none' : 'rounded-2xl border border-monis-sand'}`}>
+              <div className={`w-full aspect-[4/3] overflow-hidden mb-4 canvas-container relative bg-white/50 backdrop-blur-sm shadow-xl shadow-monis-charcoal/5 interaction-container ${isFullscreen ? 'rounded-none border-none' : 'rounded-2xl border border-monis-sand'}`}>
                 {/* Toolbar (Top Right) ALWAYS VISIBLE on mobile */}
                 <div className="absolute top-4 right-4 z-20 flex items-center gap-2 opacity-100 transition-opacity duration-300">
                   <button
@@ -162,7 +162,7 @@ const HomePage = () => {
             </div>
 
             {/* Title + Products (SCROLLABLE on mobile, normal on desktop) */}
-            <div ref={scrollContainerRef} className="flex-1 lg:flex-initial lg:overflow-y-auto overflow-y-auto auto-hide-scrollbar pb-24 lg:pb-0">
+            <div ref={scrollContainerRef} className="flex-1 md:flex-initial md:overflow-y-auto overflow-y-auto auto-hide-scrollbar pb-24 md:pb-0">
               <div>
                 <StepTitle />
               </div>
