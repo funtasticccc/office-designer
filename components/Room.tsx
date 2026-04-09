@@ -4,11 +4,11 @@ import * as THREE from "three";
 import { useMemo } from "react";
 
 // ── Palette ──────────────────────────────────────────────────────────────────
-const WALL_COLOR      = "#c8c8c8";   // medium gray
-const FLOOR_COLOR     = "#d4d4d4";   // light neutral floor
-const FLOOR_DARK      = "#c8c8c8";   // alternating plank stripe
+const WALL_COLOR      = "#ede8e0";   // warm linen white
+const FLOOR_COLOR     = "#c4aa88";   // warm light oak plank
+const FLOOR_DARK      = "#b89870";   // warm medium oak plank
 const GLASS_COLOR     = "#c8dce8";   // window glass
-const SKY_GLOW        = "#ddeef7";   // window sky
+const SKY_GLOW        = "#ddeef7";   // window sky glow
 const CURTAIN_COLOR   = "#7a7a8a";   // dark charcoal curtain
 const CURTAIN_ROD     = "#b0a090";   // warm metal rod
 
@@ -132,7 +132,7 @@ const Room = ({
           receiveShadow
         >
           <planeGeometry args={[0.008, length]} />
-          <meshStandardMaterial color="#bbbbbb" roughness={1} />
+          <meshStandardMaterial color="#a89878" roughness={1} />
         </mesh>
       ))}
 
@@ -226,7 +226,7 @@ const Room = ({
       {/* Window sill */}
       <mesh position={[-halfW - T / 2, WIN_Y_BOT - 0.04, winCenterZ]}>
         <boxGeometry args={[T + 0.14, 0.06, WIN_Z_LEN + 0.08]} />
-        <meshStandardMaterial color="#d4cfc8" roughness={0.55} metalness={0} />
+        <meshStandardMaterial color="#ddd5c8" roughness={0.55} metalness={0} />
       </mesh>
 
       {/* ── Curtain rod ── */}
