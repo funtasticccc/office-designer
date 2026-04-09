@@ -57,7 +57,7 @@ const WallGhostController = () => {
     };
 
     // ── 3. Lerp opacity & apply to every mesh in each group ──────────────────
-    const groups = [...new Set(walls.map((m) => m.userData.wallGroup as string))];
+    const groups = Array.from(new Set(walls.map((m) => m.userData.wallGroup as string)));
 
     groups.forEach((group) => {
       const target = shouldGhost[group] ? GHOST_OPACITY : 1.0;
