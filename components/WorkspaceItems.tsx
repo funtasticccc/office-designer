@@ -90,7 +90,7 @@ const WorkspaceItems = () => {
             position={pos}
             scale={desk.scale}
             rotation={desk.rotation}
-            fallback={<FallbackModel type="desk" position={pos} />}
+            fallback={<FallbackModel type="desk" position={[pos[0], 0, pos[2]]} />}
           />
         );
       })()}
@@ -118,7 +118,7 @@ const WorkspaceItems = () => {
             fallback={
               <FallbackModel
                 type="chair"
-                position={finalPosition}
+                position={[finalPosition[0], 0, finalPosition[2]]}
                 rotation={slot.rotation || chair.rotation}
               />
             }
@@ -152,14 +152,10 @@ const WorkspaceItems = () => {
                 type="monitor"
                 position={[
                   layout.position[0],
-                  layout.position[1] + surfaceY,
+                  layout.position[1] + surfaceY + 0.16,
                   layout.position[2],
                 ]}
-                rotation={[
-                  layout.rotation[0] + (monitor.rotation?.[0] || 0),
-                  layout.rotation[1] + (monitor.rotation?.[1] || 0),
-                  layout.rotation[2] + (monitor.rotation?.[2] || 0),
-                ]}
+                rotation={[0, 0, 0]}
               />
             }
           />
