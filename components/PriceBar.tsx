@@ -37,21 +37,23 @@ const PriceBar = () => {
     <div className="cta-bar">
       <div className="w-full flex flex-wrap items-center justify-between gap-y-4 gap-x-4 px-4 lg:px-8">
         {/* Left: Price info */}
-        <div className="flex items-center gap-3">
-          <div>
-            <div className="flex items-center gap-2 mb-0.5">
-              <p className="text-[10px] md:text-[11px] uppercase tracking-widest text-monis-charcoal/40 font-bold">
-                Total / week
+        {!isSummary && (
+          <div className="flex items-center gap-3">
+            <div>
+              <div className="flex items-center gap-2 mb-0.5">
+                <p className="text-[10px] md:text-[11px] uppercase tracking-widest text-monis-charcoal/40 font-bold">
+                  Total / week
+                </p>
+                <span className="bg-monis-orange/10 text-monis-orange text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full tracking-tighter">
+                  {itemCount} items
+                </span>
+              </div>
+              <p className="font-display text-xl md:text-2xl text-monis-charcoal leading-none">
+                {formatPrice(total)}
               </p>
-              <span className="bg-monis-orange/10 text-monis-orange text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full tracking-tighter">
-                {itemCount} items
-              </span>
             </div>
-            <p className="font-display text-xl md:text-2xl text-monis-charcoal leading-none">
-              {formatPrice(total)}
-            </p>
           </div>
-        </div>
+        )}
 
         {/* Right: CTA */}
         <div className={`flex items-center gap-3 ${isSummary ? 'w-full sm:w-auto mt-4 sm:mt-0' : ''}`}>
