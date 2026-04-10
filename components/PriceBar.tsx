@@ -56,7 +56,7 @@ const PriceBar = () => {
         )}
 
         {/* Right: CTA */}
-        <div className={`flex items-center gap-3 ${isSummary ? 'w-full sm:w-auto mt-4 sm:mt-0' : ''}`}>
+        <div className={`flex items-center gap-3 ${isSummary ? 'ml-auto w-full sm:w-auto mt-0 md:mt-4' : ''}`}>
           {/* Back Button (Inside PriceBar) */}
           {currentStep !== "desk" && (
             <button
