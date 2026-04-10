@@ -223,11 +223,6 @@ const Room = ({
         <meshBasicMaterial color={SKY_GLOW} side={THREE.FrontSide} />
       </mesh>
 
-      {/* Window sill */}
-      <mesh position={[-halfW - T / 2, WIN_Y_BOT - 0.04, winCenterZ]}>
-        <boxGeometry args={[T + 0.14, 0.06, WIN_Z_LEN + 0.08]} />
-        <meshStandardMaterial color="#ddd5c8" roughness={0.55} metalness={0} />
-      </mesh>
 
       {/* ── Curtain rod ── */}
       <mesh
