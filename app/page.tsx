@@ -44,7 +44,7 @@ const HomePage = () => {
     if (canvas) {
       const url = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      link.download = `monis-workspace-${new Date().getTime()}.png`;
+      link.download = `rentIT-workspace-${new Date().getTime()}.png`;
       link.href = url;
       link.click();
     }
