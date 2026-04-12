@@ -101,9 +101,9 @@ const HomePage = () => {
                 </button>
               </div>
 
-              <div className="live-badge">
+              {/* <div className="live-badge">
                 <span>Live Preview</span>
-              </div>
+              </div> */}
               <Suspense fallback={<LoadingScene />}>
                 <Scene3D />
               </Suspense>
@@ -145,9 +145,9 @@ const HomePage = () => {
                   </button>
                 </div>
                 
-                <div className="live-badge">
+                {/* <div className="live-badge">
                   <span>Live Preview</span>
-                </div>
+                </div> */}
 
                 <Suspense fallback={<LoadingScene />}>
                   <Scene3D />
