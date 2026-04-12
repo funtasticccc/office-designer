@@ -56,7 +56,7 @@ const PriceBar = () => {
         )}
 
         {/* Right: CTA */}
-        <div className={`flex items-center gap-3 ${isSummary ? 'ml-auto w-full sm:w-auto mt-0 md:mt-4' : ''}`}>
+        <div className={`flex items-center gap-3 ${isSummary ? 'ml-auto w-full sm:w-auto' : ''}`}>
           {/* Back Button (Inside PriceBar) */}
           {currentStep !== "desk" && (
             <button
@@ -68,14 +68,11 @@ const PriceBar = () => {
           )}
 
           {isSummary ? (
-            <a
-              href="https://my.monis.rent"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex-1 sm:flex-none flex items-center justify-center gap-2 bg-monis-orange hover:bg-[#d15425] text-white font-bold text-sm px-6 py-3.5 md:px-8 md:py-4 rounded-full transition-all duration-300 shadow-lg shadow-monis-orange/20"
+            <span
+              className="group flex-1 sm:flex-none flex items-center justify-center gap-2 bg-monis-orange text-white font-bold text-sm px-6 py-3.5 md:px-8 md:py-4 rounded-full shadow-lg shadow-monis-orange/20 cursor-default"
             >
               <span>Rent Your Setup</span>
-            </a>
+            </span>
           ) : (
             <button
               onClick={nextStep}
