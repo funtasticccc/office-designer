@@ -7,6 +7,8 @@ import { useShallow } from "zustand/react/shallow";
 const PriceBar = () => {
   const {
     getTotalPrice,
+    selectedDesk,
+    selectedChair,
     monitorSelections,
     selectedAccessories,
     selectedTech,
@@ -14,6 +16,8 @@ const PriceBar = () => {
     selectedMouse
   } = useWorkspaceStore(useShallow((s) => ({
     getTotalPrice: s.getTotalPrice,
+    selectedDesk: s.selectedDesk,
+    selectedChair: s.selectedChair,
     monitorSelections: s.monitorSelections,
     selectedAccessories: s.selectedAccessories,
     selectedTech: s.selectedTech,
