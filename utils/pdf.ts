@@ -40,11 +40,11 @@ export const downloadBlueprintPDF = async (
     doc.setFont("helvetica", "bold");
     doc.setFontSize(watermarkFontSize);
     doc.setTextColor(232, 96, 44);
-    doc.text("MONIS", pageWidth / 2, watermarkY, {
-      align: "center",
-      baseline: "middle",
-      angle: 45,
-    });
+    // doc.text("MONIS", pageWidth / 2, watermarkY, {
+    //   align: "center",
+    //   baseline: "middle",
+    //   angle: 45,
+    // });
 
     if (typeof (doc as any).restoreGraphicsState === "function") {
       doc.restoreGraphicsState();
