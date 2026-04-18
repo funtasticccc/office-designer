@@ -20,21 +20,29 @@ const Navbar = () => {
             <text
               x={-8}
               y={175}
-              className="font-['Arial_Black'] font-black text-[240px] fill-[#e65d2e] tracking-tighter"
+              fontFamily="'Arial Black', Arial, sans-serif"
+              fontWeight="900"
+              fontSize="240"
+              fill="#e65d2e"
+              letterSpacing="-12"
             >
               rent
             </text>
-            <circle cx={585} cy={148} r={34} className="fill-[#e65d2e]" />
-            <rect x={655} y={65} width={72} height={110} className="fill-[#e65d2e]" />
-            <circle cx={691} cy={20} r={34} className="fill-[#e65d2e]" />
+            <circle cx={585} cy={148} r={34} fill="#e65d2e" />
+            <rect x={655} y={65} width={72} height={110} fill="#e65d2e" />
+            <circle cx={691} cy={20} r={34} fill="#e65d2e" />
             <text
               x={730}
               y={175}
-              className="font-['Arial_Black'] font-black text-[240px] fill-[#e65d2e] tracking-tighter"
+              fontFamily="'Arial Black', Arial, sans-serif"
+              fontWeight="900"
+              fontSize="240"
+              fill="#e65d2e"
+              letterSpacing="-12"
             >
               t
             </text>
-          </svg>         
+          </svg>        
           {/* <span className="text-[28px] font-extrabold text-monis-orange tracking-tight leading-none">rentIT</span> */}
         </div>
 
