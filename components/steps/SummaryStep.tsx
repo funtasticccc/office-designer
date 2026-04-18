@@ -95,14 +95,14 @@ const SummaryStep = () => {
         {lineItems.map((item, i) => (
           <div
             key={i}
-            className={`flex items-center justify-between px-4 py-3 ${
+            className={`flex items-baseline justify-between px-4 py-3 ${
               i < lineItems.length - 1 ? "border-b border-monis-sand/60" : ""
             }`}
           >
             <div className="flex items-center gap-3 flex-1">
-              <div className="w-8 h-8 rounded-lg bg-monis-sand/50 flex items-center justify-center text-xs font-bold text-monis-charcoal/30 uppercase flex-shrink-0">
+              {/* <div className="w-8 h-8 rounded-lg bg-monis-sand/50 flex items-center justify-center text-xs font-bold text-monis-charcoal/30 uppercase flex-shrink-0">
                 {item.detail.slice(0, 2)}
-              </div>
+              </div> */}
               <div className="min-w-0">
                 <p className="text-sm font-medium text-monis-charcoal">
                   {item.name}
